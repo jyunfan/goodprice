@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="js/pixastic.custom.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+    $("input").change(function(e) {
+
+    var file = e.originalEvent.srcElement.files[0];
+
+    var img = $("#image")[0];
+    var reader = new FileReader();
+    reader.onloadend = function() {
+        img.src = reader.result;
+        preprocess_img(img);
+        upload_img(img);
+    }
+    reader.readAsDataURL(file);
+    });
+    });
+
+function preprocess_img(img) {
+    Pixastic.process(img, "edges", {mono:true,invert:false});
+}
+
+function upload_img(img) {
+    $.ajax('server/recognize')
+}
+</script>
+    </head>
+    <body>
+        <form action="ocr" enctype="multipart/form-data" method="post">
+            Select an image:<input type="file" capture="camera" accept="image/*" id="cameraInput"/>
+        </form>
+        <img id="image"/ width="640px">
+        Result: <label id="ocrresult"></label>
+    </body>
+</html>
